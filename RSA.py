@@ -40,18 +40,33 @@ def generateKey(modSize):
 
             print("--- Large Prime: p ---")
             print(p)
+            file = open("p.txt","w") 
+            file.write(str(p))
+            file.close
 
             print("\n--- Large Prime: q ---")
             print(q)
+            file = open("q.txt","w") 
+            file.write(str(q))
+            file.close
 
             print("\n--- Modulus: n ---")
             print(n)
+            file = open("n.txt","w") 
+            file.write(str(n))
+            file.close
 
             print("\n--- Private Signing Exponent: d3 ---")
             print(d3)
+            file = open("d3.txt","w") 
+            file.write(str(d3))
+            file.close
 
             print("\n--- Private Decryption Exponent: d5 ---")
             print(d5)
+            file = open("d5.txt","w") 
+            file.write(str(d5))
+            file.close
 
 
 
