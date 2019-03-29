@@ -162,17 +162,35 @@ if (int(userOption) == 7):
 
 
 
+   
+
 
 
 
 
 if (int(userOption) == 8):
-    timestamp = raw_input("Enter Time: ") 
+    #timestamp = raw_input("Enter Time: ") 
+
+
 
     # Get Recepient Username
     file = open("username.txt","r")
     recp = file.read()
     file.close()
+
+    listOfMsgs = requests.get('http://142.93.157.193:3000/recv/list/'+recp)
+    json_data = json.loads(listOfMsgs.content)
+    print("\n\nYour list of messages: ")
+    i = 0
+    for title in json_data:
+        strip = json_data[i].strip('.json')
+        stripInt = int(strip)
+        print("MSG [" + str(i) + "] : " + time.ctime(stripInt))
+        i = i + 1
+
+    userChoice = raw_input("\nChoose a message to read: ")
+    timestamp = json_data[int(userChoice)].strip('.json')
+   
 
     #Get message
     recv = requests.get('http://142.93.157.193:3000/recv/'+timestamp+'/'+recp)
@@ -202,10 +220,11 @@ if (int(userOption) == 8):
     eS = 5 #Recepient
 
     #Verify Signature
-    print('\n\n\n'+time.ctime(int(timestamp)))
+    print('\n'+time.ctime(int(timestamp)))
     print("--- START MESSAGE ---")
     print(pText)
     print("--- END MESSAGE ---")
     print("SIGNATURE STATUS: ")
     verify(nS, eS, sText, pText)
-    print('\n\n\n')
+    print('\n')
+
