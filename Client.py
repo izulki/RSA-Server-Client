@@ -107,7 +107,6 @@ if (int(userOption) == 6):
 if (int(userOption) == 7):
     to = raw_input("Enter Recepient: ")
     message = raw_input("Enter Message: ")
-    time = time.time()
     
     # Get Sender Private Exponent (For Signing)
     file = open("d5.txt","r")
@@ -144,27 +143,10 @@ if (int(userOption) == 7):
     "Sender": sender
     }
 
+    timeStr = str(int(time.time()))
+
+    payload = {'json_payload': msgStruct}
+
     msgJSON = json.dumps(msgStruct)
-
-
-
-    
-
-    print(msgJSON)
-
-
-
-
-    # file = open("username.txt","r")
-    # username = file.read()
-    # file.close()
-
-    # file = open("username.txt","r")
-    # username = file.read()
-    # file.close()
-
-    # file = open("username.txt","r")
-    # username = file.read()
-    # file.close()
-
-    
+    sendRequest = requests.get('http://142.93.157.193:3000/send/'+msgJSON+'/'+timeStr+'/'+to)
+    print(sendRequest.content)
