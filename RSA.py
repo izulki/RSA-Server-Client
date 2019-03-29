@@ -128,9 +128,9 @@ def verify(n, e, signedtext, message):
     print(gotHash)
     h = hashlib.md5(message)
     if (gotHash==h.hexdigest()):
-        return True
+       print("This message is authentic")
     else:
-        return False
+       print("WARNING: This message is not authentic")
 
   
 

@@ -6,6 +6,7 @@ import binascii
 import requests
 import time
 import json
+import datetime
 
 print("Welcome to RSA Messaging System!")
 print("****** Client Menu ******")
@@ -104,6 +105,11 @@ if (int(userOption) == 6):
     getrequest = requests.get('http://142.93.157.193:3000/register/'+username+'/'+modulus)
 
 
+
+
+
+
+
 if (int(userOption) == 7):
     to = raw_input("Enter Recepient: ")
     message = raw_input("Enter Message: ")
@@ -150,3 +156,56 @@ if (int(userOption) == 7):
     msgJSON = json.dumps(msgStruct)
     sendRequest = requests.get('http://142.93.157.193:3000/send/'+msgJSON+'/'+timeStr+'/'+to)
     print(sendRequest.content)
+
+
+
+
+
+
+
+
+
+
+if (int(userOption) == 8):
+    timestamp = raw_input("Enter Time: ") 
+
+    # Get Recepient Username
+    file = open("username.txt","r")
+    recp = file.read()
+    file.close()
+
+    #Get message
+    recv = requests.get('http://142.93.157.193:3000/recv/'+timestamp+'/'+recp)
+    info = json.loads(recv.content)
+    cText = str(info["cText"])
+    sender = info["Sender"]
+    sText = str(info["sText"])
+
+    # Get Private Key
+    file = open("d5.txt","r")
+    d = int(file.read())
+    file.close()
+
+    file = open("n.txt","r")
+    n = int(file.read())
+    file.close()
+
+    #Decrypt Message
+    pText = decrypt(n, d, cText)
+
+    #Get Sender Public Key (Modulus)
+    senderMod = requests.get('http://142.93.157.193:3000/getmod/'+sender)
+    nS = senderMod.content #Recepient
+    if (nS == "USER NOT FOUND"):
+        print("USER NOT FOUND")
+    nS = int(nS)
+    eS = 5 #Recepient
+
+    #Verify Signature
+    print('\n\n\n'+time.ctime(int(timestamp)))
+    print("--- START MESSAGE ---")
+    print(pText)
+    print("--- END MESSAGE ---")
+    print("SIGNATURE STATUS: ")
+    verify(nS, eS, sText, pText)
+    print('\n\n\n')
